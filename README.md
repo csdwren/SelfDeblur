@@ -34,6 +34,7 @@ Run shell scripts to deblur:
 ```bash
 bash demo_levin.sh # soon
 bash demo_lai.sh # soon
+bash demo_real.sh # soon
 ```
 All the deblurring results and deep models are also available. Please read [results/levin/readme.docx](/results/levin/readme.docx) and [results/lai/readme.docx](results/lai/readme.docx) for the details. 
 You can place the downloaded results into `./results/`, and directly compute all the [evaluation metrics](statistic/) in this paper.  
