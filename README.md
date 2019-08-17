@@ -1,4 +1,4 @@
-## Neural Blind Deconvolution Using Deep Priors (The datasets, results and code will be updated before Aug. 18)
+## Neural Blind Deconvolution Using Deep Priors 
 [[arxiv](https://arxiv.org/abs/1908.02197)] [[supp](https://csdwren.github.io/papers/SelfDeblur_supp.pdf)]
 
 
@@ -20,8 +20,8 @@ Experimental results show that our SelfDeblur can achieve notable quantitative g
 ## Datasets
 
 SelfDeblur is evaluated on datasets of Levin et al. [2] and Lai et al. [3]. 
-Please download the testing datasets from [BaiduYun]()
-or [OneDrive](), 
+Please download the testing datasets from [BaiduYun](https://pan.baidu.com/s/1FRqEzhkfs0ZIy0TuZm7Cnw)
+or [OneDrive](https://1drv.ms/u/s!An-BNLJWOClldZsSDPju_HHf2d4?e=9LEHmi), 
 and place the unzipped folders into `./datasets/`.
 
 
@@ -29,14 +29,13 @@ and place the unzipped folders into `./datasets/`.
 
 ### 1) Run SelfDeblur
 
-We have placed our learned deep models to [BaiduYun]() and [OneDrive](). Please download these models and place the unzipped folders into `./results/`. 
 
 Run shell scripts to deblur:
 ```bash
-bash demo_Levin.sh
-bash demo_Lai.sh
+bash demo_levin.sh # soon
+bash demo_lai.sh # soon
 ```
-All the deblurring results are also available at [BaiduYun]() and [OneDrive]().
+All the deblurring results and deep models are also available. Please read [results/levin/readme.docx](/results/levin/readme.docx) and [results/lai/readme.docx](results/lai/readme.docx) for the details. 
 You can place the downloaded results into `./results/`, and directly compute all the [evaluation metrics](statistic/) in this paper.  
 
 ### 2) Evaluation metrics
@@ -46,8 +45,8 @@ We also provide the MATLAB scripts to compute the average PSNR and SSIM values r
 
 ```Matlab
  cd ./statistic
- run statistic_Levin.m 
- run statistic_Lai.m 
+ run statistic_levin.m 
+ run statistic_lai.m % soon
 ```
 
 
