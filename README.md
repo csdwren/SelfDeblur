@@ -32,9 +32,9 @@ and place the unzipped folders into `./datasets/`.
 
 Run shell scripts to deblur:
 ```bash
-bash demo_levin.sh # soon
-bash demo_lai.sh # soon
-bash demo_real.sh # soon
+bash demo_levin.sh 
+bash demo_lai.sh # coming
+bash demo_real.sh # coming
 ```
 All the deblurring results and deep models are also available. Please read [results/levin/readme.docx](/results/levin/readme.docx) and [results/lai/readme.docx](results/lai/readme.docx) for the details. 
 You can place the downloaded results into `./results/`, and directly compute all the [evaluation metrics](statistic/) in this paper.  
@@ -47,7 +47,7 @@ We also provide the MATLAB scripts to compute the average PSNR and SSIM values r
 ```Matlab
  cd ./statistic
  run statistic_levin.m 
- run statistic_lai.m % soon
+ run statistic_lai.m % coming
 ```
 
 
