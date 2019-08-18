@@ -40,7 +40,7 @@ for nnn = 1:nmodel
             imgpath = fullfile(modelpath,sprintf('im%d_kernel%d_img.png',iii,jjj));
             deblur=im2double(imread(imgpath));%deblur
             
-            [tp,ts,tI] = comp_upto_shift(deblur,x_true);
+            [tp,ts,tI] = comp_upto_shift(deblur,x_true); %tI is the aligned and cropped image. 
             
             imgpath = fullfile(groundk,sprintf('im%d_kernel%d_img.png',iii,jjj));
             deblur=im2double(imread(imgpath));%deblur
