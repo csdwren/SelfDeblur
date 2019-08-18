@@ -47,7 +47,7 @@ We also provide the MATLAB scripts to compute the average PSNR and SSIM values r
 ```Matlab
  cd ./statistic
  run statistic_levin.m 
- run statistic_lai.m % coming
+ run statistic_lai.m 
 ```
 
 
