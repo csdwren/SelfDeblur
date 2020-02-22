@@ -11,7 +11,7 @@ Experimental results show that our SelfDeblur can achieve notable quantitative g
 
 
 ## Prerequisites
-- Python 3.6, PyTorch >= 1.0 
+- Python 3.6, PyTorch >= 0.4 
 - Requirements: opencv-python, tqdm
 - Platforms: Ubuntu 16.04, cuda-10.0 & cuDNN v-7.5
 - MATLAB for computing [evaluation metrics](statistic/)
@@ -32,9 +32,10 @@ and place the unzipped folders into `./datasets/`.
 
 Run shell scripts to deblur:
 ```bash
-bash demo_levin.sh 
-bash demo_lai.sh # coming
-bash demo_real.sh # coming
+python selfdeblur_levin.py # The training has been improved, and usually can achieve better retults than those repoted in the paper. 
+python selfdeblur_lai.py # Run SelfDeblur on Lai dataset, where blurry images are firstly converted to their Y channel. 
+python selfdeblur_nonblind.py # Only update Gx, while fixing Gk. Several images in Lai datast may converge to "black" image, but the blur kernels are good. I will check why this may happen. In these cases, you need to run selfdeblur_nonblind.py to generate good deblurring results.
+python selfdeblur_ycbcr.py # Handle color images in YCbCr space. 
 ```
 All the deblurring results and deep models are also available. Please read [results/levin/readme.docx](/results/levin/readme.docx) and [results/lai/readme.docx](results/lai/readme.docx) for the details. 
 You can place the downloaded results into `./results/`, and directly compute all the [evaluation metrics](statistic/) in this paper.  

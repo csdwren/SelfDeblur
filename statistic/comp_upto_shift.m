@@ -1,4 +1,4 @@
-function [psnrs,ssims,tI1]=comp_upto_shift(I1,I2)
+function [psnrs,ssims,tI1]=comp_upto_shift(I1,I2,maxshift)
 %function [ssde,tI1]=comp_upto_shift(I1,I2)
 %  compute sum of square differences between two images, after
 %  finding the best shift between them. need to account for shift
@@ -15,8 +15,8 @@ function [psnrs,ssims,tI1]=comp_upto_shift(I1,I2)
 [N1,N2]=size(I1);
 
 
-maxshift=5;
-shifts=[-5:0.25:5];
+%maxshift=5;
+shifts=[-maxshift:0.25:maxshift];
 
 
 

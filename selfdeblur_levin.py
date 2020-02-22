@@ -6,7 +6,6 @@ from __future__ import print_function
 import matplotlib.pyplot as plt
 import argparse
 import os
-# os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 import numpy as np
 from networks.skip import skip
 from networks.fcn import fcn
@@ -19,15 +18,15 @@ from skimage.io import imsave
 import warnings
 from tqdm import tqdm
 from torch.optim.lr_scheduler import MultiStepLR
-from utils.deconv_utils import *
-from TVLoss import TVLoss
+from utils.common_utils import *
+from SSIM import SSIM
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--num_iter', type=int, default=5000, help='number of epochs of training')
 parser.add_argument('--img_size', type=int, default=[256, 256], help='size of each image dimension')
 parser.add_argument('--kernel_size', type=int, default=[21, 21], help='size of blur kernel [height, width]')
 parser.add_argument('--data_path', type=str, default="datasets/levin/", help='path to blurry image')
-parser.add_argument('--save_path', type=str, default="results/levin_iter5k/", help='path to save results')
+parser.add_argument('--save_path', type=str, default="results/levin/", help='path to save results')
 parser.add_argument('--save_frequency', type=int, default=100, help='lfrequency to save results')
 opt = parser.parse_args()
 #print(opt)
@@ -48,7 +47,6 @@ for f in files_source:
     INPUT = 'noise'
     pad = 'reflection'
     LR = 0.01
-    tv_weight = 0e-6 # usually large tv_weight for high noise level. And for Levin dataset (sigma -> 0), TVLoss is not necessary
     num_iter = opt.num_iter
     reg_noise_std = 0.001
 
@@ -96,9 +94,6 @@ for f in files_source:
                 upsample_mode='bilinear',
                 need_sigmoid=True, need_bias=True, pad=pad, act_fun='LeakyReLU')
 
-    if os.path.exists(os.path.join(opt.save_path, "%s_xnet.pth" % imgname)):
-        net = torch.load(os.path.join(opt.save_path, "%s_xnet.pth" % imgname))
-
     net = net.type(dtype)
 
     '''
@@ -109,16 +104,11 @@ for f in files_source:
     net_input_kernel.squeeze_()
 
     net_kernel = fcn(n_k, opt.kernel_size[0]*opt.kernel_size[1])
-
-    if os.path.exists(os.path.join(opt.save_path, "%s_knet.pth" % imgname)):
-        net_kernel = torch.load(os.path.join(opt.save_path, "%s_knet.pth" % imgname))
-
     net_kernel = net_kernel.type(dtype)
 
     # Losses
     mse = torch.nn.MSELoss().type(dtype)
-    L1 = torch.nn.L1Loss(reduction='sum').type(dtype)
-    tv_loss = TVLoss(tv_loss_weight=tv_weight)
+    ssim = SSIM().type(dtype)
 
     # optimizer
     optimizer = torch.optim.Adam([{'params':net.parameters()},{'params':net_kernel.parameters(),'lr':1e-4}], lr=LR)
@@ -133,7 +123,6 @@ for f in files_source:
 
         # input regularization
         net_input = net_input_saved + reg_noise_std*torch.zeros(net_input_saved.shape).type_as(net_input_saved.data).normal_()
-        # net_input_kernel = net_input_kernel_saved + reg_noise_std*torch.zeros(net_input_kernel_saved.shape).type_as(net_input_kernel_saved.data).normal_()
 
         # change the learning rate
         scheduler.step(step)
@@ -147,7 +136,11 @@ for f in files_source:
         # print(out_k_m)
         out_y = nn.functional.conv2d(out_x, out_k_m, padding=0, bias=None)
 
-        total_loss = mse(out_y, y) + tv_loss(out_x) #+ tv_loss2(out_k_m)
+        if step < 1000:
+            total_loss = mse(out_y,y) 
+        else:
+            total_loss = 1-ssim(out_y, y) 
+
         total_loss.backward()
         optimizer.step()
 

@@ -26,6 +26,7 @@ nmodel = length(struct_model);
 
 nimgs = 4;
 nkernels=8;
+maxshift=10; %Usually maxshift=5 is enough. If you find very low PSNR and SSIM for images with visually good results, maxshift should be set as a larger value. 
 
 
 for nnn = 1:nmodel
@@ -44,7 +45,7 @@ for nnn = 1:nmodel
             
             imgpath = fullfile(groundk,sprintf('im%d_kernel%d_img.png',iii,jjj));
             deblur=im2double(imread(imgpath));%deblur
-            [~,~,tI_groundk] = comp_upto_shift(deblur,x_true);
+            [~,~,tI_groundk] = comp_upto_shift(deblur,x_true,maxshift);
             
             te = norm(tI-x_true(16:end-15,16:end-15))/norm(tI_groundk-x_true(16:end-15,16:end-15));
             

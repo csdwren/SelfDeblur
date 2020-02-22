@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from .common import *
 
-def fcn(num_input_channels=2, num_output_channels=3, num_hidden=1000):
+def fcn(num_input_channels=200, num_output_channels=1, num_hidden=1000):
 
 
     model = nn.Sequential()

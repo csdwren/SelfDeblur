@@ -2,29 +2,31 @@ import torch
 import torch.nn as nn
 import torchvision
 import sys
-
+import cv2
 import numpy as np
 from PIL import Image
 import PIL
 import numpy as np
+
 
 import matplotlib.pyplot as plt
 import random
 
 def crop_image(img, d=32):
     '''Make dimensions divisible by `d`'''
+    imgsize = img.shape
 
-    new_size = (img.size[0] - img.size[0] % d, 
-                img.size[1] - img.size[1] % d)
+    new_size = (imgsize[0] - imgsize[0] % d,
+                imgsize[1] - imgsize[1] % d)
 
     bbox = [
-            int((img.size[0] - new_size[0])/2), 
-            int((img.size[1] - new_size[1])/2),
-            int((img.size[0] + new_size[0])/2),
-            int((img.size[1] + new_size[1])/2),
+            int((imgsize[0] - new_size[0])/2),
+            int((imgsize[1] - new_size[1])/2),
+            int((imgsize[0] + new_size[0])/2),
+            int((imgsize[1] + new_size[1])/2),
     ]
 
-    img_cropped = img.crop(bbox)
+    img_cropped = img[0:new_size[0],0:new_size[1],:]
     return img_cropped
 
 def get_params(opt_over, net, net_input, downsampler=None):
@@ -121,7 +123,7 @@ def get_image(path, imsize=-1):
 
 def fill_noise(x, noise_type):
     """Fills tensor `x` with noise of type `noise_type`."""
-    torch.manual_seed(0)
+    #torch.manual_seed(0)
     if noise_type == 'u':
         x.uniform_()
     elif noise_type == 'n':
@@ -237,3 +239,56 @@ def optimize(optimizer_type, parameters, closure, LR, num_iter):
             optimizer.step()
     else:
         assert False
+
+
+def pixelshuffle(image, scale):
+    '''
+    Discription: Given an image, return a reversible sub-sampling
+    [Input]: Image ndarray float
+    [Return]: A mosic image of shuffled pixels
+    '''
+    if scale == 1:
+        return image
+    w, h, c = image.shape
+    mosaic = np.array([])
+    for ws in range(scale):
+        band = np.array([])
+        for hs in range(scale):
+            temp = image[ws::scale, hs::scale, :]  # get the sub-sampled image
+            band = np.concatenate((band, temp), axis=1) if band.size else temp
+        mosaic = np.concatenate((mosaic, band), axis=0) if mosaic.size else band
+    return mosaic
+
+
+def reverse_pixelshuffle(image, scale, fill=0, fill_image=0, ind=[0, 0]):
+    '''
+    Discription: Given a mosaic image of subsampling, recombine it to a full image
+    [Input]: Image
+    [Return]: Recombine it using different portions of pixels
+    '''
+    w, h, c = image.shape
+    real = np.zeros((w, h, c))  # real image
+    wf = 0
+    hf = 0
+    for ws in range(scale):
+        hf = 0
+        for hs in range(scale):
+            temp = real[ws::scale, hs::scale, :]
+            wc, hc, cc = temp.shape  # get the shpae of the current images
+            if fill == 1 and ws == ind[0] and hs == ind[1]:
+                real[ws::scale, hs::scale, :] = fill_image[wf:wf + wc, hf:hf + hc, :]
+            else:
+                real[ws::scale, hs::scale, :] = image[wf:wf + wc, hf:hf + hc, :]
+            hf = hf + hc
+        wf = wf + wc
+    return real
+
+
+def readimg(path_to_image):
+    img = cv2.imread(path_to_image)
+    x = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
+    y, cr, cb = cv2.split(x)
+
+    return img, y, cb, cr
+
+

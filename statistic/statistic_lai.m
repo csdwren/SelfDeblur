@@ -35,6 +35,7 @@ nmodel = length(struct_model);
 
 nimgs = 5;
 nkernels=4;
+maxshift=10;%Usually maxshift=5 is enough. If you find very low PSNR and SSIM for images with visually good results, maxshift should be set as a larger value. 
 
 set = {'manmade','natural','people','saturated','text'};
 
@@ -61,7 +62,7 @@ for nnn = 1:nmodel
                     deblur = tmp(:,:,1);
                 end
                 
-                [tp,ts,tI] = comp_upto_shift(deblur,x_true); % tI is the aligned and cropped image. 
+                [tp,ts,tI] = comp_upto_shift(deblur,x_true,maxshift); % tI is the aligned and cropped image. 
 
                 
                 imgpath = fullfile(modelpath,'aligned');
