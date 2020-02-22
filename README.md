@@ -30,7 +30,7 @@ and place the unzipped folders into `./datasets/`.
 ### 1) Run SelfDeblur
 
 
-Run shell scripts to deblur:
+Run scripts to deblur:
 ```bash
 python selfdeblur_levin.py # The training has been improved, and usually can achieve better retults than those repoted in the paper. 
 python selfdeblur_lai.py # Run SelfDeblur on Lai dataset, where blurry images are firstly converted to their Y channel. 
