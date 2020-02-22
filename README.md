@@ -37,6 +37,8 @@ python selfdeblur_lai.py # Run SelfDeblur on Lai dataset, where blurry images ar
 python selfdeblur_nonblind.py # Only update Gx, while fixing Gk. Several images in Lai datast may converge to "black" image, but the blur kernels are good. I will check why this may happen. In these cases, you need to run selfdeblur_nonblind.py to generate good deblurring results.
 python selfdeblur_ycbcr.py # Handle color images in YCbCr space. 2500 iterations are adopted. If you need better texture details, more iterations will help. 
 ```
+_In current SelfDeblur code, TV regularization has been removed. The improved code is more robust to blur kernel estimation. But for some images with high level noises and non-uniform blurry images, the deblurring results may suffer from ringing effects due to our uniform convolution-based loss function. In this case, adding TV regularization to SelfDeblur or running another nonblind deblur method may be an choice._
+
 All the deblurring results and deep models are also available. Please read [results/levin/readme.docx](/results/levin/readme.docx) and [results/lai/readme.docx](results/lai/readme.docx) for the details. 
 You can place the downloaded results into `./results/`, and directly compute all the [evaluation metrics](statistic/) in this paper.  
 
