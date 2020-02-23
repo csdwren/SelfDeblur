@@ -93,7 +93,6 @@ for f in files_source:
     net_input_kernel.squeeze_()
 
     net_kernel = fcn(n_k, opt.kernel_size[0]*opt.kernel_size[1])
-
     net_kernel = net_kernel.type(dtype)
 
     # Losses

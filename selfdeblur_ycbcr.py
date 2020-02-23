@@ -84,9 +84,6 @@ for f in files_source:
                upsample_mode='bilinear',
                need_sigmoid=True, need_bias=True, pad=pad, act_fun='LeakyReLU')
 
-    # if os.path.exists(os.path.join(opt.save_path, "%s_xnet.pth" % imgname)):
-    #    net = torch.load(os.path.join(opt.save_path, "%s_xnet.pth" % imgname))
-
     net = net.type(dtype)
 
     n_k = 200
@@ -94,7 +91,6 @@ for f in files_source:
     net_input_kernel.squeeze_()
 
     net_kernel = fcn(n_k, opt.kernel_size[0] * opt.kernel_size[1])
-
     net_kernel = net_kernel.type(dtype)
 
     # Losses
@@ -126,7 +122,6 @@ for f in files_source:
         out_k = net_kernel(net_input_kernel)
 
         out_k_m = out_k.view(-1, 1, opt.kernel_size[0], opt.kernel_size[1])
-        # out_k_m = out_k
 
         # print(out_k_m)
         out_y = nn.functional.conv2d(out_x, out_k_m, padding=0, bias=None)

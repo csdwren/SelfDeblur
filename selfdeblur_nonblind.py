@@ -94,7 +94,7 @@ for f in files_source:
                 upsample_mode='bilinear',
                 need_sigmoid=True, need_bias=True, pad=pad, act_fun='LeakyReLU')
 
-    net = net.type(dtype)
+    net = net.type(dtype) 
 
     # Losses
     mse = torch.nn.MSELoss().type(dtype)

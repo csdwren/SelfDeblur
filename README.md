@@ -54,7 +54,7 @@ You can place the downloaded results into `./results/`, and directly compute all
 
 ### 2. Evaluation metrics
 
-We also provide the MATLAB scripts to compute the average PSNR and SSIM values reported in the paper.
+We provide the MATLAB scripts to compute the average PSNR and SSIM values reported in the paper.
  
 
 ```Matlab
