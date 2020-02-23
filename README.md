@@ -30,15 +30,15 @@ and place the unzipped folders into `./datasets/`.
 ### 1. Run SelfDeblur
 
 
-(1) SelfDeblur on Levin dataset. The code has been improved, and usually can achieve better retults than those repoted in the paper.
+(1) SelfDeblur on Levin dataset. The code has been improved, and usually can achieve better retults than those reported in the paper.
 ```bash
 python selfdeblur_levin.py 
 ```
 
-(2) SelfDeblur on Lai dataset, where blurry images have firstly been converted to their Y channel. Several images may converge to "black" image, but their blur kernels are good. I will check why this happened. In these cases, you need to run selfdeblur_nonblind.py to generate good deblurring results.
+(2) SelfDeblur on Lai dataset, where blurry images have firstly been converted to their Y channel. Several images may converge to "black" image, but their blur kernels are good. I will check why this happened. In these cases, you need to run "_selfdeblur_nonblind.py_" to generate good deblurring results.
 ```bash
 python selfdeblur_lai.py 
-python selfdeblur_nonblind.py # Given pretrained Gk, only update Gx while fixing Gk. 
+python selfdeblur_nonblind.py --data_path path_to_your_results_with_pretreind_Gk # Optional nonblind SelfDeblur. Given pretrained Gk, only update Gx while fixing Gk.
 ```
 
 (3) Handle color images in YCbCr space. 2500 iterations are adopted. If you need better texture details, more iterations will help. 
@@ -47,7 +47,7 @@ python selfdeblur_ycbcr.py
 ```
 
 
-_*In current SelfDeblur code, TV regularization has been removed. The improved code is more robust to blur kernel estimation. But for some images with high level noises and non-uniform blurry images, the deblurring results may suffer from ringing effects due to our uniform convolution-based loss function. In this case, adding TV regularization to SelfDeblur or running another nonblind deblur method may be an choice._
+_*In current SelfDeblur code, TV regularization has been removed. The improved code is more robust to blur kernel estimation. But for some images with high level noises and non-uniform blurry images, the deblurring results may suffer from ringing effects due to our uniform convolution-based loss function. In this case, adding TV regularization to SelfDeblur loss function or running another nonblind deblur method may be an choice._
 
 All the deblurring results and deep models are also available. Please read [results/levin/readme.docx](/results/levin/readme.docx) and [results/lai/readme.docx](results/lai/readme.docx) for the details. 
 You can place the downloaded results into `./results/`, and directly compute all the [evaluation metrics](statistic/) in this paper.  
