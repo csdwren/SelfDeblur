@@ -1,4 +1,4 @@
-## Neural Blind Deconvolution Using Deep Priors 
+## [Neural Blind Deconvolution Using Deep Priors](https://www.researchgate.net/publication/335013294_Neural_Blind_Deconvolution_Using_Deep_Priors) 
 [[pdf](https://www.researchgate.net/publication/335013294_Neural_Blind_Deconvolution_Using_Deep_Priors)] [[supp](https://csdwren.github.io/papers/SelfDeblur_supp.pdf)]
 
 
