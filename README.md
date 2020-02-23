@@ -1,5 +1,5 @@
 ## Neural Blind Deconvolution Using Deep Priors 
-[[arxiv](https://arxiv.org/abs/1908.02197)] [[supp](https://csdwren.github.io/papers/SelfDeblur_supp.pdf)]
+[[pdf](https://www.researchgate.net/publication/335013294_Neural_Blind_Deconvolution_Using_Deep_Priors)] [[supp](https://csdwren.github.io/papers/SelfDeblur_supp.pdf)]
 
 
 ### Introduction
@@ -35,10 +35,10 @@ and place the unzipped folders into `./datasets/`.
 python selfdeblur_levin.py 
 ```
 
-(2) SelfDeblur on Lai dataset, where blurry images have firstly been converted to their Y channel. Several images may converge to "black" image, but their blur kernels are good. I will check why this happened. In these cases, you need to run `selfdeblur_nonblind.py` to generate good deblurring results.
+(2) SelfDeblur on Lai dataset, where blurry images have firstly been converted to their Y channel. Several images may converge to "black" deblurring images, but their estimated blur kernels are good. I will check why this happened. In these cases, you need to run `selfdeblur_nonblind.py` to generate final deblurring images.
 ```bash
 python selfdeblur_lai.py 
-python selfdeblur_nonblind.py --data_path path_to blurry --save_path path_to_estimated_kernel # Optional nonblind SelfDeblur. Given kernel estimated by Gk, only update Gx.
+python selfdeblur_nonblind.py --data_path path_to_blurry --save_path path_to_estimated_kernel # Optional nonblind SelfDeblur. Given kernel estimated by Gk, only update Gx.
 ```
 
 (3) Handle color images in YCbCr space. 2500 iterations are adopted. If you need better texture details, more iterations will help. 
