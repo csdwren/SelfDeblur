@@ -35,7 +35,7 @@ and place the unzipped folders into `./datasets/`.
 python selfdeblur_levin.py 
 ```
 
-(2) SelfDeblur on Lai dataset, where blurry images have firstly been converted to their Y channel. Several images may converge to "black" image, but their blur kernels are good. I will check why this happened. In these cases, you need to run "_selfdeblur_nonblind.py_" to generate good deblurring results.
+(2) SelfDeblur on Lai dataset, where blurry images have firstly been converted to their Y channel. Several images may converge to "black" image, but their blur kernels are good. I will check why this happened. In these cases, you need to run `selfdeblur_nonblind.py` to generate good deblurring results.
 ```bash
 python selfdeblur_lai.py 
 python selfdeblur_nonblind.py --data_path path_to_your_results_with_pretreind_Gk # Optional nonblind SelfDeblur. Given pretrained Gk, only update Gx while fixing Gk.
@@ -43,7 +43,7 @@ python selfdeblur_nonblind.py --data_path path_to_your_results_with_pretreind_Gk
 
 (3) Handle color images in YCbCr space. 2500 iterations are adopted. If you need better texture details, more iterations will help. 
 ```bash
-python selfdeblur_ycbcr.py 
+python selfdeblur_ycbcr.py # Deblur several color images in `./datasets/real/`.
 ```
 
 
