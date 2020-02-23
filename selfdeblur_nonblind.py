@@ -1,7 +1,4 @@
 
-# coding: utf-8
-
-
 from __future__ import print_function
 import matplotlib.pyplot as plt
 import argparse
@@ -22,11 +19,12 @@ from utils.common_utils import *
 from SSIM import SSIM
 
 parser = argparse.ArgumentParser()
+parser.add_argument("--preprocess", type=bool, default=False, help='run prepare_data or not')
 parser.add_argument('--num_iter', type=int, default=1000, help='number of epochs of training')
 parser.add_argument('--img_size', type=int, default=[256, 256], help='size of each image dimension')
 parser.add_argument('--kernel_size', type=int, default=[21, 21], help='size of blur kernel [height, width]')
-parser.add_argument('--data_path', type=str, default="results/lai/uniform/nonblind/blurry/", help='path to blurry image')
-parser.add_argument('--save_path', type=str, default="results/lai/uniform/nonblind/blurry/results", help='path to save results')
+parser.add_argument('--data_path', type=str, default="results/cvpr16/uniform/nonblind/blurry/", help='path to blurry image')
+parser.add_argument('--save_path', type=str, default="results/cvpr16/uniform/nonblind/blurry/results", help='path to save results')
 parser.add_argument('--save_frequency', type=int, default=100, help='lfrequency to save results')
 opt = parser.parse_args()
 #print(opt)
@@ -66,8 +64,17 @@ for f in files_source:
 
     _, imgs = get_image(path_to_image, -1) # load image and convert to np.
     y = np_to_torch(imgs).type(dtype)
-
     img_size = imgs.shape
+
+    path_to_kernel = os.path.join(opt.save_path, "%s_k.png" % imgname)
+    out_k = cv2.imread(path_to_kernel,cv2.IMREAD_GRAYSCALE)
+    out_k = np.expand_dims(np.float32(out_k/255.),0)
+    out_k = np_to_torch(out_k).type(dtype)
+    out_k = torch.clamp(out_k, 0., 1.)
+    out_k /= torch.sum(out_k)
+
+
+
     print(imgname)
     # ######################################################################
     padh, padw = opt.kernel_size[0]-1, opt.kernel_size[1]-1
@@ -89,17 +96,6 @@ for f in files_source:
 
     net = net.type(dtype)
 
-    n_k = 200
-    net_input_kernel = get_noise(n_k, INPUT, (1, 1)).type(dtype).detach()
-    net_input_kernel.squeeze_()
-
-    net_kernel = fcn(n_k, opt.kernel_size[0]*opt.kernel_size[1])
-
-    # load kernel net, which will not be updated
-    net_kernel = torch.load(os.path.join(opt.save_path, "%s_knet.pth" % imgname))
-
-    net_kernel = net_kernel.type(dtype)
-
     # Losses
     mse = torch.nn.MSELoss().type(dtype)
     ssim = SSIM().type(dtype)
@@ -110,14 +106,12 @@ for f in files_source:
 
     # initilization inputs
     net_input_saved = net_input.detach().clone()
-    net_input_kernel_saved = net_input_kernel.detach().clone()
 
     ### start SelfDeblur
     for step in tqdm(range(num_iter)):
 
         # input regularization
         net_input = net_input_saved + reg_noise_std*torch.zeros(net_input_saved.shape).type_as(net_input_saved.data).normal_()
-        # net_input_kernel = net_input_kernel_saved + reg_noise_std*torch.zeros(net_input_kernel_saved.shape).type_as(net_input_kernel_saved.data).normal_()
 
         # change the learning rate
         scheduler.step(step)
@@ -125,13 +119,11 @@ for f in files_source:
 
         # get the network output
         out_x = net(net_input)
-        out_k = net_kernel(net_input_kernel)
-    
-        out_k_m = out_k.view(-1,1,opt.kernel_size[0],opt.kernel_size[1])
-        # print(out_k_m)
-        out_y = nn.functional.conv2d(out_x, out_k_m, padding=0, bias=None)
 
-        total_loss = 1 - ssim(out_y, y)  # + tv_loss(out_x) #+ tv_loss2(out_k_m)
+        # print(out_k_m)
+        out_y = nn.functional.conv2d(out_x, out_k, padding=0, bias=None)
+
+        total_loss = 1 - ssim(out_y, y)  
         total_loss.backward()
         optimizer.step()
 
@@ -142,15 +134,7 @@ for f in files_source:
             out_x_np = torch_to_np(out_x)
             out_x_np = out_x_np.squeeze()
             out_x_np = out_x_np[padh//2:padh//2+img_size[1], padw//2:padw//2+img_size[2]]
-            #out_x_np = np.uint8(out_x_np*255)
-            #cv2.imwrite(save_path, out_x_np)
             imsave(save_path, out_x_np)
 
-            save_path = os.path.join(opt.save_path, '%s_k.png'%imgname)
-            out_k_np = torch_to_np(out_k_m)
-            out_k_np = out_k_np.squeeze()
-            out_k_np /= np.max(out_k_np)
-            #imsave(save_path, out_k_np)
-
             torch.save(net, os.path.join(opt.save_path, "%s_xnet.pth" % imgname))
-            #torch.save(net_kernel, os.path.join(opt.save_path, "%s_knet.pth" % imgname))
+
