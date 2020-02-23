@@ -23,8 +23,8 @@ parser.add_argument("--preprocess", type=bool, default=False, help='run prepare_
 parser.add_argument('--num_iter', type=int, default=1000, help='number of epochs of training')
 parser.add_argument('--img_size', type=int, default=[256, 256], help='size of each image dimension')
 parser.add_argument('--kernel_size', type=int, default=[21, 21], help='size of blur kernel [height, width]')
-parser.add_argument('--data_path', type=str, default="results/cvpr16/uniform/nonblind/blurry/", help='path to blurry image')
-parser.add_argument('--save_path', type=str, default="results/cvpr16/uniform/nonblind/blurry/results", help='path to save results')
+parser.add_argument('--data_path', type=str, default="results/lai/uniform/nonblind/blurry/", help='path to blurry image')
+parser.add_argument('--save_path', type=str, default="results/lai/uniform/nonblind/blurry/results", help='path to save results')
 parser.add_argument('--save_frequency', type=int, default=100, help='lfrequency to save results')
 opt = parser.parse_args()
 #print(opt)
@@ -73,7 +73,7 @@ for f in files_source:
     out_k = torch.clamp(out_k, 0., 1.)
     out_k /= torch.sum(out_k)
 
-
+    opt.kernel_size = [out_k.shape[2], out_k.shape[3]]
 
     print(imgname)
     # ######################################################################
