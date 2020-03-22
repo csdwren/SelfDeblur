@@ -21,7 +21,7 @@ Experimental results show that our SelfDeblur can achieve notable quantitative g
 
 SelfDeblur is evaluated on datasets of Levin et al. [2] and Lai et al. [3]. 
 Please download the testing datasets from [BaiduYun](https://pan.baidu.com/s/1FRqEzhkfs0ZIy0TuZm7Cnw)
-or [OneDrive](https://1drv.ms/u/s!An-BNLJWOClliGSEa6QY9TVedqJH?e=6UT4iE), 
+or [OneDrive](https://1drv.ms/u/s!An-BNLJWOClliGSEa6QY9TVedqJH?e=8vSWld), 
 and place the unzipped folders into `./datasets/`.
 
 
