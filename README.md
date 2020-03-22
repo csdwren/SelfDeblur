@@ -21,7 +21,7 @@ Experimental results show that our SelfDeblur can achieve notable quantitative g
 
 SelfDeblur is evaluated on datasets of Levin et al. [2] and Lai et al. [3]. 
 Please download the testing datasets from [BaiduYun](https://pan.baidu.com/s/1FRqEzhkfs0ZIy0TuZm7Cnw)
-or [OneDrive](https://1drv.ms/u/s!An-BNLJWOClldZsSDPju_HHf2d4?e=9LEHmi), 
+or [OneDrive](https://1drv.ms/u/s!An-BNLJWOClliGSEa6QY9TVedqJH?e=6UT4iE), 
 and place the unzipped folders into `./datasets/`.
 
 
@@ -46,10 +46,29 @@ python selfdeblur_nonblind.py --data_path path_to_blurry --save_path path_to_est
 python selfdeblur_ycbcr.py # Deblur several color images in `./datasets/real/`.
 ```
 
-
 _*In current SelfDeblur code, TV regularization has been removed. The improved code is more robust to blur kernel estimation. But for some images with high level noises and non-uniform blurry images, the deblurring results may suffer from ringing effects due to our uniform convolution-based loss function. In this case, adding TV regularization to SelfDeblur loss function or running another nonblind deblur method may be an choice._
 
-All the deblurring results and deep models are also available. Please read [results/levin/readme.docx](/results/levin/readme.docx) and [results/lai/readme.docx](results/lai/readme.docx) for the details. 
+
+(4) Reproduce results reported in the paper. The codes for reproducing results require Pytorch 1.0.0 to load the models. Higher versions may work well, but I do not test. Pytorch 0.4 fails to load these trained models. 
+
+As for Levin dataset, one should download the SelfDeblur models from [BaiduYun](https://pan.baidu.com/s/1u0TZqmmHEzt6TX6Te75VRA) (`levin/SelfDeblur.zip`), and then run the following script to load trained models for reproducing the results reported in the paper. 
+We note that the deblurring images may be slightly different due to the random perturbations of input to Gx, while generated blur kernels keep same.  
+```bash
+python selfdeblur_levin_reproduce.py # Reproduce results in the paper. 
+```
+
+As for Lai dataset, one should download the SelfDeblur models from [BaiduYun](https://pan.baidu.com/s/1I42WVCLz2SwPjJD7nydJvg) (`lai/SelfDeblur_models.zip`), and then run the following script to load trained models for reproducing the results reported in the paper. 
+We note that the deblurring images may be slightly different due to the random perturbations of input to Gx, while generated blur kernels keep same. 
+```bash
+python selfdeblur_lai_reproduce.py # Reproduce results in the paper. 
+```
+
+_*Actually, the trained SelfDeblur models can be regarded as an optimization solution to a given blurry image, and cannot be generalized to other blurry images. So these trained models can only be used to reproduce the results.  
+I suggest to re-run scripts in (1) and (2) to see the performance of SelfDeblur on Levin and Lai datasets. Since I have updated the code, the results on Levin dataset are usually better than the paper, and the results on Lai dataset are also comparable. _
+
+
+
+All the deblurring results are also available. Please read [results/levin/readme.docx](/results/levin/readme.docx) and [results/lai/readme.docx](results/lai/readme.docx) for the details. 
 You can place the downloaded results into `./results/`, and directly compute all the [evaluation metrics](statistic/) in this paper.  
 
 ### 2. Evaluation metrics
