@@ -63,8 +63,7 @@ We note that the deblurring images may be slightly different due to the random p
 python selfdeblur_lai_reproduce.py # Reproduce results in the paper. 
 ```
 
-_*Actually, the trained SelfDeblur models can be regarded as an optimization solution to a given blurry image, and cannot be generalized to other blurry images. So these trained models can only be used to reproduce the results.  
-I suggest to re-run scripts in (1) and (2) to see the performance of SelfDeblur on Levin and Lai datasets. Since I have updated the code, the results on Levin dataset are usually better than the paper, and the results on Lai dataset are also comparable. _
+_*Actually, the trained SelfDeblur models can be regarded as an optimization solution to a given blurry image, and cannot be generalized to other blurry images. So these trained models can only be used to reproduce the results.I suggest to re-run scripts in (1) and (2) to see the performance of SelfDeblur on Levin and Lai datasets. Since I have updated the code, the results on Levin dataset are usually better than the paper, and the results on Lai dataset are also comparable._
 
 
 
