@@ -85,7 +85,7 @@ for f in files_source:
     '''
     input_depth = 8
 
-    net_input = get_noise(input_depth, INPUT, (opt.img_size[0], opt.img_size[1])).type(dtype).detach()
+    net_input = get_noise(input_depth, INPUT, (opt.img_size[0], opt.img_size[1])).type(dtype)
 
     net = skip( input_depth, 1,
                 num_channels_down = [128, 128, 128, 128, 128],

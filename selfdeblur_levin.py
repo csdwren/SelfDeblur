@@ -82,7 +82,7 @@ for f in files_source:
     '''
     input_depth = 8
 
-    net_input = get_noise(input_depth, INPUT, (opt.img_size[0], opt.img_size[1])).type(dtype).detach()
+    net_input = get_noise(input_depth, INPUT, (opt.img_size[0], opt.img_size[1])).type(dtype)
 
     net = skip( input_depth, 1,
                 num_channels_down = [128, 128, 128, 128, 128],
@@ -97,7 +97,7 @@ for f in files_source:
     k_net:
     '''
     n_k = 200
-    net_input_kernel = get_noise(n_k, INPUT, (1, 1)).type(dtype).detach()
+    net_input_kernel = get_noise(n_k, INPUT, (1, 1)).type(dtype)
     net_input_kernel.squeeze_()
 
     net_kernel = fcn(n_k, opt.kernel_size[0]*opt.kernel_size[1])

@@ -123,7 +123,7 @@ def get_image(path, imsize=-1):
 
 def fill_noise(x, noise_type):
     """Fills tensor `x` with noise of type `noise_type`."""
-    #torch.manual_seed(0)
+    torch.manual_seed(0)
     if noise_type == 'u':
         x.uniform_()
     elif noise_type == 'n':
